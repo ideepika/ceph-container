@@ -34,11 +34,19 @@ fi
 CONTAINER_REPO_USERNAME=${CONTAINER_REPO_USERNAME:-$DOCKER_HUB_USERNAME}
 CONTAINER_REPO_PASSWORD=${CONTAINER_REPO_PASSWORD:-$DOCKER_HUB_PASSWORD}
 
+OUTFILE=../src/daemon-base/__CEPH_BASE_PACKAGES__
+if [[ "$FLAVOR" == "crimson" ]] && ! grep -q "crimson" $OUTFILE ; then
+  sed -i -e 's/__CSI_PACKAGES__/__CSI_PACKAGES__ \\/g' $OUTFILE
+  echo "        ceph-crimson-osd__ENV_[CEPH_POINT_RELEASE]__" >> $OUTFILE
+fi
+
 # GIT_BRANCH is typically 'origin/master', we strip the variable to only get 'master'
 CONTAINER_BRANCH="${GIT_BRANCH#*/}"
 CONTAINER_SHA=$(git rev-parse --short HEAD)
 TAGGED_HEAD=false # does HEAD is on a tag ?
 DEVEL=${DEVEL:=false}
+OSD_FLAVOR=${FLAVOR:="default"}
+
 if [ -z "$CEPH_RELEASES" ]; then
   # NEVER change 'master' position in the array, this will break the 'latest' tag
   CEPH_RELEASES=(master luminous mimic nautilus octopus)
@@ -47,7 +55,6 @@ fi
 HOST_ARCH=$(uname -m)
 BUILD_ARM= # Set this variable to anything if you want to build the ARM images too
 CN_RELEASE="v2.3.1"
-
 
 #############
 # FUNCTIONS #
@@ -202,6 +209,7 @@ function build_ceph_imgs {
   if ${CI_CONTAINER}; then
     make FLAVORS="${CEPH_BRANCH},centos,$(_centos_release ${CEPH_BRANCH})" \
          CEPH_DEVEL="true" \
+         OSD_FLAVOR=${OSD_FLAVOR} \
          RELEASE=${RELEASE} \
          TAG_REGISTRY=${CONTAINER_REPO_ORGANIZATION} \
          IMAGES_TO_BUILD=daemon-base \

@@ -114,7 +114,7 @@ ENDHERE
     else
       # we go for a 'manual' bootstrap
       ceph "${CLI_OPTS[@]}" auth get-or-create osd."$OSD_ID" mon 'allow profile osd' osd 'allow *' mgr 'allow profile osd' -o "$OSD_PATH"/keyring
-      ceph-osd --conf /etc/ceph/"${CLUSTER}".conf --osd-data "$OSD_PATH" --mkfs -i "$OSD_ID"
+      "$BASE_OSD" --conf /etc/ceph/"${CLUSTER}".conf --osd-data "$OSD_PATH" --mkfs -i "$OSD_ID"
     fi
   fi
 
@@ -126,7 +126,7 @@ ENDHERE
 
   # start OSD
   chown --verbose -R ceph. "$OSD_PATH"
-  ceph-osd "${DAEMON_OPTS[@]}" -i "$OSD_ID"
+  "$BASE_OSD" "${DAEMON_OPTS[@]}" -i "$OSD_ID"
   ceph "${CLI_OPTS[@]}" osd pool create "$RBD_POOL" 8
 }
 

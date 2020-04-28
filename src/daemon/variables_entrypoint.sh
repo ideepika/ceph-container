@@ -23,6 +23,11 @@ if [[ "$HOSTNAME" != "$HOST_FQDN" ]]; then
     fi
   done
 fi
+
+if [[ "$OSD_FLAVOR" == "crimson" ]]; then
+  BASE_OSD="crimson-osd"
+fi
+
 : "${MON_NAME:=${HOSTNAME}}"
 : "${RGW_NAME:=${HOSTNAME}}"
 : "${RBD_MIRROR_NAME:=${HOSTNAME}}"
@@ -36,6 +41,7 @@ fi
 : "${K8S_HOST_NETWORK:=0}"
 : "${K8S_MON_SELECTOR:=app=ceph,daemon=mon}"
 : "${NETWORK_AUTO_DETECT:=0}"
+: "${BASE_OSD:=ceph-osd}"
 : "${OSD_JOURNAL_SIZE:=100}"
 : "${OSD_BLUESTORE:=1}"
 : "${OSD_FILESTORE:=0}"

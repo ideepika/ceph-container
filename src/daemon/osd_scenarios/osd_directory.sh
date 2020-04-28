@@ -41,7 +41,7 @@ function osd_directory {
     # write the secret to the osd keyring file
     ceph-authtool --create-keyring "${OSD_PATH}"/keyring --name osd."${OSD_ID}" --add-key "${OSD_SECRET}"
     # init data directory
-    ceph-osd --cluster "${CLUSTER}" -i "${OSD_ID}" --mkfs --osd-uuid "${UUID}" --mkjournal --osd-journal "${OSD_J}" --setuser ceph --setgroup ceph
+    "$BASE_OSD" --cluster "${CLUSTER}" -i "${OSD_ID}" --mkfs --osd-uuid "${UUID}" --mkjournal --osd-journal "${OSD_J}" --setuser ceph --setgroup ceph
   fi
 
   # create the directory and an empty Procfile
@@ -63,7 +63,7 @@ function osd_directory {
           OSD_J=${OSD_PATH}/journal
        fi
     fi
-    echo "${CLUSTER}-${OSD_ID}: /usr/bin/ceph-osd ${CLI_OPTS[*]} -f -i ${OSD_ID} --osd-journal ${OSD_J} -k $OSD_KEYRING" | tee -a /etc/forego/"${CLUSTER}"/Procfile
+    echo "${CLUSTER}-${OSD_ID}: /usr/bin/$BASE_OSD ${CLI_OPTS[*]} -f -i ${OSD_ID} --osd-journal ${OSD_J} -k $OSD_KEYRING" | tee -a /etc/forego/"${CLUSTER}"/Procfile
   done
   log "SUCCESS"
   source /opt/ceph-container/bin/osd_common.sh

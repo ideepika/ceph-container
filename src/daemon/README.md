@@ -138,6 +138,8 @@ Options for OSDs (TODO: consolidate these options between the types):
 - `OSD_DEVICE` - mandatory for `activate` and `disk` OSD types; this specifies which block device to use as the OSD
 - `OSD_JOURNAL` - optional override of the OSD journal file. this only applies to the `activate` and `disk` OSD types
 - `OSD_FORCE_EXT4` - in case the osd data on ext4 is not automatically recognized (i.e. hidden by overlayfs) you can force them by settings this to `yes`.
+<!-- TODO: add support for crimson-osd local builds
+  - `BASE_OSD` - for choosing crimson OSD specify `crimson-osd` as BASE_OSD. -->
 
 ### Without OSD_TYPE
 
@@ -270,6 +272,7 @@ List of available options:
 - `HOSTNAME` is used to place the OSD in the CRUSH map
 
 If you do not want to use `--privileged=true`, please fall back on the second example.
+
 
 ### Ceph disk activate
 
