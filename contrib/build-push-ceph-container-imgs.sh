@@ -48,6 +48,14 @@ HOST_ARCH=$(uname -m)
 BUILD_ARM= # Set this variable to anything if you want to build the ARM images too
 CN_RELEASE="v2.3.1"
 
+#hack to install crimson-osd package instead of ceph-osd
+if [[ "$FLAVOR" == "crimson" ]]; then
+  #needs travis build support
+  #sed -i -e 's/ceph-osd/crimson-osd/g' ../src/daemon-base/__CEPH_BASE_PACKAGES__
+  echo >> "crimson-osd__ENV_[CEPH_POINT_RELEASE]__ "
+  BASE_OSD="crimson-osd"
+fi
+
 
 #############
 # FUNCTIONS #
