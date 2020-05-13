@@ -17,4 +17,5 @@
         __RADOSGW_PACKAGES__ \
         __GANESHA_PACKAGES__ \
         __ISCSI_PACKAGES__ \
-        __CSI_PACKAGES__
+        __CSI_PACKAGES__ \
+        ceph-crimson-osd__ENV_[CEPH_POINT_RELEASE]__ 

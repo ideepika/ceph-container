@@ -104,6 +104,14 @@ osd data = ${OSD_PATH}
 
 ENDHERE
     fi
+    extra_osd_args=""
+  if [[ "$BASE_OSD" == "crimson-osd" ]]; then
+    echo "adding crimson extra args"
+    # designate a single CPU node $osd for osd.$OSD_ID 
+    extra_osd_args+="--smp 1 --cpuset $OSD_ID"
+    extra_osd_args+=" --debug"
+  fi
+
     # bootstrap OSD
     mkdir -p "$OSD_PATH"
     chown --verbose -R ceph. "$OSD_PATH"
@@ -114,7 +122,7 @@ ENDHERE
     else
       # we go for a 'manual' bootstrap
       ceph "${CLI_OPTS[@]}" auth get-or-create osd."$OSD_ID" mon 'allow profile osd' osd 'allow *' mgr 'allow profile osd' -o "$OSD_PATH"/keyring
-      "$BASE_OSD" --conf /etc/ceph/"${CLUSTER}".conf --osd-data "$OSD_PATH" --mkfs -i "$OSD_ID"
+      "$BASE_OSD" --conf /etc/ceph/"${CLUSTER}".conf --osd-data "$OSD_PATH" --mkfs -i osd."$OSD_ID" "$extra_osd_args"
     fi
   fi
 
