@@ -59,7 +59,7 @@ bash -c ' \
   fi && \
   if [[ "${CEPH_VERSION}" =~ master|^wip* ]] || ${CEPH_DEVEL}; then \
     #check OSD_FLAVOR
-    REPO_URL="https://2.chacra.ceph.com/r/ceph/wip-pdonnell-testing-20200509.013424/17d3c6f770113e1ec5d4118f16f9d91274a5118e/centos/8/flavors/crimson/" ;\
+    REPO_URL="https://2.chacra.ceph.com/r/ceph/wip-badone-testing/754bb61af6aeb7d7a32968f4a90b0e85b8930baf/centos/8/flavors/crimson/" ;\
     RELEASE_VER=0 ;\
   else \
     RELEASE_VER=1 ;\
